@@ -1,3 +1,5 @@
+Monitoreo MultiService
+
 const express = require('express');
 const os = require('os');
 
@@ -6,11 +8,11 @@ const port = process.env.PORT || 3000;
 
 app.get('/', (req, res) => {
   res.json({
-    mensaje: 'Aplicacion desplegada con Dokploy',
+    mensaje: 'Actualizacion automatica con Dokploy',
     institucion: 'Universidad del Quindio',
     curso: 'Administracion de Infraestructura de TI',
     plataforma: 'Dokploy PaaS',
-    version: '1.0.0',
+    version: '2.0.0',
     fecha: new Date().toISOString()
   });
 });
