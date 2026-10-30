@@ -35,6 +35,40 @@ app.get('/info', (req, res) => {
   });
 });
 
+const mysql = require('mysql2/promise');
+
+app.get('/db-check', async (req, res) => {
+  let connection;
+
+  try {
+    connection = await mysql.createConnection({
+      host: process.env.DB_HOST,
+      port: Number(process.env.DB_PORT || 3306),
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
+      connectTimeout: 5000
+    });
+
+    const [rows] = await connection.query(
+      'SELECT DATABASE() AS database_name'
+    );
+
+    res.json({
+      estado: 'conectado',
+      motor: 'MySQL',
+      base_datos: rows[0].database_name
+    });
+  } catch (error) {
+    console.error('Error de conexion MySQL:', error.message);
+    res.status(503).json({
+      estado: 'error de conexion'
+    });
+  } finally {
+    if (connection) await connection.end();
+  }
+});
+
 app.listen(port, '0.0.0.0', () => {
   console.log(`Servidor corriendo en puerto ${port}`);
 });
